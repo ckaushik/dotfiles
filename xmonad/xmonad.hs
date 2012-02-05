@@ -130,6 +130,8 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
             [
             ((modMask, xK_space), renameWorkspace bigXPConfig)
             , ((modMask, xK_BackSpace), removeWorkspace)
+            , ((modMask, xK_Left), prevWS)
+            , ((modMask, xK_Right), nextWS)
             , ((modMask, xK_Return), toggleWS)
             , ((modMask .|. shiftMask, xK_Return), shiftToPreviousWorkspace)
             ]
@@ -240,6 +242,7 @@ main = xmonad $ ewmh defaultConfig {
                   spawn "killall xflux; ~/xflux  -l 12.9833 -g 77.5833"
                   spawn "pidgin"
                   spawn "killall parcellite; parcellite"
+                  spawn "dropbox start"
         , layoutHook         = windowArrange $ smartBorders $ myLayout
   }
 
