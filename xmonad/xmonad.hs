@@ -214,9 +214,13 @@ defaultLayout = layoutHintsToCenter (tiled)
 
 myLayout = toggleLayouts Full $ workspaceDir "" $ windowNavigation $ avoidStruts
         $ onWorkspace "im" (withIM (1%7) (Role "buddy_list") defaultLayout)
-        $ onWorkspace "terminal" (workspaceDir "~/openstack/melange" defaultLayout)
-        $ onWorkspace "code" (workspaceDir "~/openstack/melange" defaultLayout)
-        $ onWorkspace "nova" (workspaceDir "~/openstack/nova" defaultLayout)
+        $ onWorkspace "procurement" (workspaceDir "~/flipkart/supply-chain/sc-proc" defaultLayout)
+        $ onWorkspace "ui" (workspaceDir "~/flipkart/supply-chain/sc-proc-ui" defaultLayout)
+        $ onWorkspace "fulfillment" (workspaceDir "~/flipkart/supply-chain/sc-fulfillment" defaultLayout)
+        $ onWorkspace "supplier" (workspaceDir "~/flipkart/supply-chain/sc-supplier" defaultLayout)
+        $ onWorkspace "erp" (workspaceDir "~/flipkart/supply-chain/" defaultLayout)
+        $ onWorkspace "core" (workspaceDir "~/flipkart/supply-chain/sc-core" defaultLayout)
+        $ onWorkspace "oms" (workspaceDir "~/flipkart/supply-chain/sc-oms" defaultLayout)
         $ onWorkspace "wall" defaultLayout
         $ defaultLayout
 
@@ -225,9 +229,9 @@ myManageHook = composeAll .concat $ [[namedScratchpadManageHook scratchpads, man
 
 main = xmonad $ ewmh defaultConfig {
         focusFollowsMouse  = True,
-        terminal  = "konsole",
+        terminal  = "rxvt",
         modMask            = mod4Mask,
-        workspaces         = ["im"],
+        workspaces         = ["im", "supplier", "core", "procurement", "fulfillment", "ui", "oms", "wall"]
         keys               = myKeys,
         mouseBindings      = myMouseBindings,
         focusedBorderColor = "#00FF00",

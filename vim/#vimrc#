@@ -4,7 +4,7 @@ call vundle#rc()
 
 Bundle 'tpope/vim-git'
 Bundle 'Rubytest.vim'
-let g:rubytest_in_quickfix=1
+let g
 Bundle 'pbrisbin/html-template-syntax.git'
 Bundle 'csv.vim'
 Bundle 'Gundo'
@@ -274,8 +274,8 @@ autocmd FileType python set omnifunc=pythoncomplete#Complete
 
 set textwidth=79
 set tabstop=8
-set softtabstop=2
-set shiftwidth=2
+set softtabstop=4
+set shiftwidth=4
 
 
 python << EOF
@@ -287,4 +287,15 @@ for p in sys.path:
         vim.command(r"set path+=%s" % (p.replace(" ", r"\ ")))
 EOF
 set guioptions+=c
+
+" Removes trailing spaces
+function TrimSpace()
+  %s/\s*$//
+  ''
+:endfunction
+
+autocmd FileWritePre * :silent call TrimSpace()
+autocmd FileAppendPre * :silent call TrimSpace()
+autocmd FilterWritePre * :silent call TrimSpace()
+autocmd BufWritePre * :silent call TrimSpace()
 au FocusLost * :wa
