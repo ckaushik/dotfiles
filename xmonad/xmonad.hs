@@ -10,6 +10,7 @@ import XMonad.Actions.CycleWS
 import XMonad.Actions.PhysicalScreens
 import XMonad.Actions.UpdatePointer
 import XMonad.Actions.CopyWindow
+import XMonad.Actions.GridSelect
 import XMonad.Hooks.UrgencyHook
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Layout.WindowArranger
@@ -86,8 +87,8 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask              , xK_period), sendMessage (IncMasterN (-1)))
     , ((modMask .|. shiftMask, xK_q     ), io (exitWith ExitSuccess))
     , ((modMask              , xK_q     ), restart "xmonad" True)
-    , ((modMask .|. shiftMask, xK_g     ), windowPromptGoto smallXPConfig { autoComplete = Just 500000 } )
-    , ((modMask .|. shiftMask, xK_b     ), windowPromptBring  smallXPConfig)
+    , ((modMask, xK_g), goToSelected defaultGSConfig)
+    , ((modMask .|. shiftMask, xK_g), bringSelected defaultGSConfig)
     , ((modMask, xK_b), sendMessage ToggleStruts)
     , ((modMask              , xK_BackSpace), focusUrgent)
     , ((modMask .|. controlMask, xK_y), defaultCommands >>= runCommand)
@@ -214,13 +215,14 @@ defaultLayout = layoutHintsToCenter (tiled)
 
 myLayout = toggleLayouts Full $ workspaceDir "" $ windowNavigation $ avoidStruts
         $ onWorkspace "im" (withIM (1%7) (Role "buddy_list") defaultLayout)
-        $ onWorkspace "procurement" (workspaceDir "~/flipkart/supply-chain/sc-proc" defaultLayout)
-        $ onWorkspace "ui" (workspaceDir "~/flipkart/supply-chain/sc-proc-ui" defaultLayout)
-        $ onWorkspace "fulfillment" (workspaceDir "~/flipkart/supply-chain/sc-fulfillment" defaultLayout)
-        $ onWorkspace "supplier" (workspaceDir "~/flipkart/supply-chain/sc-supplier" defaultLayout)
-        $ onWorkspace "erp" (workspaceDir "~/flipkart/supply-chain/" defaultLayout)
-        $ onWorkspace "core" (workspaceDir "~/flipkart/supply-chain/sc-core" defaultLayout)
-        $ onWorkspace "oms" (workspaceDir "~/flipkart/supply-chain/sc-oms" defaultLayout)
+        $ onWorkspace "procurement" (workspaceDir "~/supply-chain/sc-proc" defaultLayout)
+        $ onWorkspace "ui" (workspaceDir "~/supply-chain/sc-proc-ui" defaultLayout)
+        $ onWorkspace "fulfillment" (workspaceDir "~/supply-chain/sc-fulfillment" defaultLayout)
+        $ onWorkspace "supplier" (workspaceDir "~/supply-chain/sc-supplier" defaultLayout)
+        $ onWorkspace "erp" (workspaceDir "~/supply-chain/" defaultLayout)
+        $ onWorkspace "core" (workspaceDir "~/supply-chain/sc-core" defaultLayout)
+        $ onWorkspace "oms" (workspaceDir "~/supply-chain/sc-oms" defaultLayout)
+        $ onWorkspace "qb" (workspaceDir "~/git/qb" defaultLayout)
         $ onWorkspace "wall" defaultLayout
         $ defaultLayout
 
@@ -231,7 +233,7 @@ main = xmonad $ ewmh defaultConfig {
         focusFollowsMouse  = True,
         terminal  = "rxvt",
         modMask            = mod4Mask,
-        workspaces         = ["im", "supplier", "core", "procurement", "fulfillment", "ui", "oms", "wall"]
+        workspaces         = ["im", "supplier", "core", "procurement", "fulfillment", "ui", "oms", "wall"],
         keys               = myKeys,
         mouseBindings      = myMouseBindings,
         focusedBorderColor = "#00FF00",
