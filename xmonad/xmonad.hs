@@ -20,6 +20,7 @@ import XMonad.Layout.ToggleLayouts
 import XMonad.Layout.WorkspaceDir
 import XMonad.Layout.WindowNavigation
 import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.SetWMName
 import XMonad.Layout.NoBorders
 import XMonad.Layout.LayoutHints
 import XMonad.Util.Run(spawnPipe)
@@ -244,6 +245,7 @@ main = xmonad $ ewmh defaultConfig {
                        dynamicLog
                        updatePointer (Relative 0.5 0.5)
         , startupHook        = do
+                  setWMName "LG3D"
                   startupHook defaultConfig
                   spawn "killall xflux; ~/xflux  -l 12.9833 -g 77.5833"
                   spawn "pidgin"
