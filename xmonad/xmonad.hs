@@ -62,7 +62,11 @@ smallXPConfig = bigXPConfig
   }
 
 scratchpads = [
+     NS "htop" "xterm -e htop" (title =? "htop")
+         (customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3)),
      NS "notes" "gvim --role notes -c 'set autoread' -c'set wrap' -c 'au FocusLost * :wa' -c 'colorscheme slate' -c 'Note'" (role =? "notes")
+         (customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3)),
+     NS "systemmonitor" "conky" (role =? "notes")
          (customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3))
  ] where role = stringProperty "WM_WINDOW_ROLE"
 
@@ -111,7 +115,9 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask .|. shiftMask, xK_j), sendMessage $ Swap D)
 
     , ((modMask, xK_i), SM.submap . M.fromList $
-            [((modMask, xK_n), namedScratchpadAction scratchpads "notes")])
+            [((modMask, xK_n), namedScratchpadAction scratchpads "notes"),
+            ((modMask, xK_p), namedScratchpadAction scratchpads "htop"),
+            ((modMask, xK_s), namedScratchpadAction scratchpads "systemmonitor")])
     , ((modMask, xK_o), SM.submap . M.fromList $
             [ ((modMask, xK_e), spawn "gvim")
             , ((modMask, xK_b), spawn "google-chrome")
