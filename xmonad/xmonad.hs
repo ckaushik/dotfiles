@@ -12,10 +12,13 @@ import XMonad.Actions.UpdatePointer
 import XMonad.Actions.CopyWindow
 import XMonad.Actions.GridSelect
 import XMonad.Hooks.UrgencyHook
+import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.FadeInactive
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Layout.WindowArranger
 import XMonad.Layout.Master
 import XMonad.Layout.Grid
+import XMonad.Layout.ShowWName
 import XMonad.Layout.ToggleLayouts
 import XMonad.Layout.WorkspaceDir
 import XMonad.Layout.WindowNavigation
@@ -25,7 +28,6 @@ import XMonad.Layout.NoBorders
 import XMonad.Layout.LayoutHints
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.Loggers
-import WorkspaceCompareUpgrade
 import XMonad.Layout.PerWorkspace
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
@@ -38,11 +40,13 @@ import XMonad.Prompt.Window
 import XMonad.Prompt.AppendFile
 import XMonad.ManageHook
 import XMonad.Util.NamedScratchpad
-import XMonad.Actions.CopyWindow
+import XMonad.Util.WorkspaceCompare
 import qualified XMonad.Actions.Submap as SM
 import qualified XMonad.Actions.Search as S
 import XMonad.Util.Run
 import XMonad.Hooks.DynamicLog
+
+specialWorkspaces = ["NSP"]
 
 bigXPConfig = defaultXPConfig
 	{ font = "xft:terminal-50"
@@ -64,9 +68,13 @@ smallXPConfig = bigXPConfig
 scratchpads = [
      NS "htop" "xterm -e htop" (title =? "htop")
          (customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3)),
+     NS "music" "urxvt -title music -e ncmpc" (title =? "music")
+         (customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3)),
      NS "notes" "gvim --role notes -c 'set autoread' -c'set wrap' -c 'au FocusLost * :wa' -c 'colorscheme slate' -c 'Note'" (role =? "notes")
          (customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3)),
-     NS "systemmonitor" "conky" (role =? "notes")
+     NS "information" "conky" (className =? "Conky")
+         (customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3)),
+     NS "volume" "pavucontrol" (className =? "Pavucontrol")
          (customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3))
  ] where role = stringProperty "WM_WINDOW_ROLE"
 
@@ -116,14 +124,16 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
     , ((modMask, xK_i), SM.submap . M.fromList $
             [((modMask, xK_n), namedScratchpadAction scratchpads "notes"),
+            ((modMask, xK_i), namedScratchpadAction scratchpads "information"),
             ((modMask, xK_p), namedScratchpadAction scratchpads "htop"),
-            ((modMask, xK_s), namedScratchpadAction scratchpads "systemmonitor")])
+            ((modMask, xK_m), namedScratchpadAction scratchpads "music"),
+            ((modMask, xK_v), namedScratchpadAction scratchpads "volume")])
     , ((modMask, xK_o), SM.submap . M.fromList $
             [ ((modMask, xK_e), spawn "gvim")
             , ((modMask, xK_b), spawn "google-chrome")
             , ((modMask, xK_v), spawn "vlc")
             , ((modMask, xK_t), spawn $ XMonad.terminal conf)
-            , ((modMask, xK_f), spawn "nautilus")
+            , ((modMask, xK_f), spawn "nautilus --no-desktop")
             ])
     , ((modMask, xK_a), SM.submap . M.fromList $
             [ ((modMask, xK_n), appendFilePrompt smallXPConfig "~/Dropbox/notes/Everything")
@@ -138,10 +148,10 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
             [
             ((modMask, xK_space), renameWorkspace bigXPConfig)
             , ((modMask, xK_BackSpace), removeWorkspace)
-            , ((modMask, xK_Left), prevWS)
-            , ((modMask, xK_Right), nextWS)
-            , ((modMask, xK_Return), toggleWS)
-            , ((modMask .|. shiftMask, xK_Return), shiftToPreviousWorkspace)
+            , ((modMask, xK_Left), moveTo Prev HiddenNonEmptyWS)
+            , ((modMask, xK_Right), moveTo Next HiddenNonEmptyWS)
+            , ((modMask, xK_Return), toggleWS' specialWorkspaces)
+            , ((modMask .|. shiftMask, xK_Return), toggleWSWhileShiftingCurrentWindow)
             ]
       )
     , ((modMask, xK_s), SM.submap . M.fromList $
@@ -183,6 +193,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
             )
             ]
 
+
 withWorkspaceByInitial job fstLet =
   do ws <- gets (map W.tag . W.workspaces . windowset)
      case find (\w -> fstLet == w !! 0) ws of
@@ -220,27 +231,24 @@ defaultLayout = layoutHintsToCenter (tiled)
   where
      tiled  = Tall 1 (3 / 100) (1 / 2)
 
-myLayout = toggleLayouts Full $ workspaceDir "" $ windowNavigation $ avoidStruts
+myLayout = showWName' (defaultSWNConfig {swn_fade = 0.1, swn_font = "xft: Ubuntu-30", swn_color = "#a8f7a3", swn_bgcolor = "#3f3c6d"}) $ toggleLayouts Full $ workspaceDir "" $ windowNavigation $ avoidStruts
         $ onWorkspace "im" (withIM (1%7) (Role "buddy_list") defaultLayout)
-        $ onWorkspace "procurement" (workspaceDir "~/supply-chain/sc-proc" defaultLayout)
-        $ onWorkspace "ui" (workspaceDir "~/supply-chain/sc-proc-ui" defaultLayout)
-        $ onWorkspace "fulfillment" (workspaceDir "~/supply-chain/sc-fulfillment" defaultLayout)
-        $ onWorkspace "supplier" (workspaceDir "~/supply-chain/sc-supplier" defaultLayout)
-        $ onWorkspace "erp" (workspaceDir "~/supply-chain/" defaultLayout)
-        $ onWorkspace "core" (workspaceDir "~/supply-chain/sc-core" defaultLayout)
-        $ onWorkspace "oms" (workspaceDir "~/supply-chain/sc-oms" defaultLayout)
-        $ onWorkspace "qb" (workspaceDir "~/git/qb" defaultLayout)
+        $ onWorkspace "procurement" (workspaceDir "/home/gavri/supply-chain/sc-proc" defaultLayout)
+        $ onWorkspace "ui" (workspaceDir "/home/gavri/supply-chain/sc-proc-ui" defaultLayout)
+        $ onWorkspace "fulfillment" (workspaceDir "/home/gavri/supply-chain/sc-fulfillment" defaultLayout)
+        $ onWorkspace "supplier" (workspaceDir "/home/gavri/supply-chain/sc-supplier" defaultLayout)
+        $ onWorkspace "erp" (workspaceDir "/home/gavri/supply-chain/" defaultLayout)
+        $ onWorkspace "core" (workspaceDir "/home/gavri/supply-chain/sc-core" defaultLayout)
+        $ onWorkspace "oms" (workspaceDir "/home/gavri/supply-chain/sc-oms" defaultLayout)
         $ onWorkspace "wall" defaultLayout
         $ defaultLayout
 
-
 myManageHook = composeAll .concat $ [[namedScratchpadManageHook scratchpads, manageDocks], [className =? "Do" --> doIgnore ]]
-
 main = xmonad $ ewmh defaultConfig {
         focusFollowsMouse  = True,
         terminal  = "rxvt",
         modMask            = mod4Mask,
-        workspaces         = ["im", "supplier", "core", "procurement", "fulfillment", "ui", "oms", "wall"],
+        workspaces         = ["im", "browser", "supplier", "core", "procurement", "fulfillment", "ui", "oms", "wall"],
         keys               = myKeys,
         mouseBindings      = myMouseBindings,
         focusedBorderColor = "#00FF00",
@@ -260,6 +268,7 @@ main = xmonad $ ewmh defaultConfig {
         , layoutHook         = windowArrange $ smartBorders $ myLayout
   }
 
-shiftToPreviousWorkspace = do
-    hs <- gets (W.hidden . windowset)
-    unless (null hs) (windows . (liftM2 (.) W.view W.shift) . W.tag $ head hs)
+
+toggleWSWhileShiftingCurrentWindow = do
+   hs <- gets $ (flip skipTags) specialWorkspaces . W.hidden . windowset
+   unless (null hs) (windows . (liftM2 (.) W.view W.shift) . W.tag $ head hs)
