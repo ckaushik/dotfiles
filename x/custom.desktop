@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=Custom
+Comment=Custom Session to run ~./.xsession
+Exec=~/.xsession
+X-Ubuntu-Gettext-Domain=gdm
