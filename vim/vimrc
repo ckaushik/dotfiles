@@ -50,11 +50,13 @@ Bundle 'snipMate'
 Bundle 'hlint'
 autocmd FileType haskell compiler hlint
 
+let g:rubytest_in_quickfix = 1 
 
 set nocompatible
 
 set backspace=indent,eol,start
-
+let g:rubytest_cmd_test = "ruby -W0 %p" 
+let g:rubytest_cmd_testcase = "ruby -W0 %p -n '/%c/'" 
 set nobackup
 set nowritebackup
 set noswapfile
