@@ -68,7 +68,7 @@ smallXPConfig = bigXPConfig
 scratchpads = [
      NS "htop" "xterm -e htop" (title =? "htop")
          (customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3)),
-     NS "music" "urxvt -title music -e ncmpc" (title =? "music")
+     NS "music" "roxterm -title music -e ncmpc" (title =? "music")
          (customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3)),
      NS "notes" "gvim --role notes -c 'set autoread' -c'set wrap' -c 'au FocusLost * :wa' -c 'colorscheme slate' -c 'Note'" (role =? "notes")
          (customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3)),
@@ -246,7 +246,7 @@ myLayout = showWName' (defaultSWNConfig {swn_fade = 0.1, swn_font = "xft: Ubuntu
 myManageHook = composeAll .concat $ [[namedScratchpadManageHook scratchpads, manageDocks], [className =? "Do" --> doIgnore ]]
 main = xmonad $ ewmh defaultConfig {
         focusFollowsMouse  = True,
-        terminal  = "rxvt",
+        terminal  = "roxterm",
         modMask            = mod4Mask,
         workspaces         = ["im", "browser", "supplier", "core", "procurement", "fulfillment", "ui", "oms", "wall"],
         keys               = myKeys,
