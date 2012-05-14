@@ -1,8 +1,8 @@
 import System.IO
 import System.Exit
 import Control.Monad
-import List
 import Control.Concurrent
+import Data.List
 import XMonad
 import XMonad.Actions.Commands
 import XMonad.Actions.DynamicWorkspaces
