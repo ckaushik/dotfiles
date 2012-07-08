@@ -130,7 +130,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
             ((modMask, xK_v), namedScratchpadAction scratchpads "volume")])
     , ((modMask, xK_o), SM.submap . M.fromList $
             [ ((modMask, xK_e), spawn "gvim")
-            , ((modMask, xK_b), spawn "google-chrome")
+            , ((modMask, xK_b), spawn "chromium")
             , ((modMask, xK_v), spawn "vlc")
             , ((modMask, xK_t), spawn $ XMonad.terminal conf)
             , ((modMask, xK_f), spawn "nautilus --no-desktop")
@@ -246,7 +246,7 @@ myLayout = showWName' (defaultSWNConfig {swn_fade = 0.1, swn_font = "xft: Ubuntu
 myManageHook = composeAll .concat $ [[namedScratchpadManageHook scratchpads, manageDocks], [className =? "Do" --> doIgnore ]]
 main = xmonad $ ewmh defaultConfig {
         focusFollowsMouse  = True,
-        terminal  = "roxterm",
+        terminal  = "urxvt",
         modMask            = mod4Mask,
         workspaces         = ["im", "mail", "browser", "supplier", "core", "procurement", "fulfillment", "ui", "oms", "wall"],
         keys               = myKeys,
