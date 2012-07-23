@@ -66,23 +66,23 @@ smallXPConfig = bigXPConfig
   }
 
 scratchpads = [
-     NS "htop" "xterm -e htop" (title =? "htop")
+     NS "htop" "urxvt -e htop" (title =? "htop")
          (customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3)),
-     NS "music" "roxterm -title music -e ncmpc" (title =? "music")
+     NS "music" "urxvt -title music -e ncmpc" (title =? "music")
          (customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3)),
      NS "notes" "gvim --role notes -c 'set autoread' -c'set wrap' -c 'au FocusLost * :wa' -c 'colorscheme slate' -c 'Note'" (role =? "notes")
          (customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3)),
      NS "information" "conky" (className =? "Conky")
          (customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3)),
-     NS "volume" "pavucontrol" (className =? "Pavucontrol")
+     NS "volume" "urxvt -e alsamixer" (title =? "alsamixer")
          (customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3))
  ] where role = stringProperty "WM_WINDOW_ROLE"
 
 myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     [ ((modMask .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
-    , ((modMask .|. controlMask, xK_l     ), spawn "gnome-screensaver-command -l")
-    , ((controlMask, xK_space     ), spawn "gnome-do")
-    , ((modMask .|. shiftMask, xK_x     ), changeDir defaultXPConfig)
+    , ((modMask .|. controlMask, xK_l     ), spawn "slock")
+    -- , ((modMask .|. controlMask, xK_s     ), spawn "pm-suspend")
+    , ((controlMask, xK_space     ), spawn "gmrun")
 
     , ((modMask .|. shiftMask, xK_c     ), kill1)
     , ((modMask,               xK_space ), sendMessage NextLayout)
@@ -91,7 +91,6 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask,               xK_n     ), refresh)
     , ((modMask,               xK_Tab   ), windows W.focusDown)
     , ((modMask .|. shiftMask,               xK_Tab   ), windows W.swapDown)
-    , ((modMask,               xK_m     ), windows W.focusMaster  )
     , ((modMask,               xK_Return), windows W.swapMaster)
     , ((modMask,               xK_bracketleft     ), sendMessage Shrink)
     , ((modMask,               xK_bracketright     ), sendMessage Expand)
@@ -122,18 +121,25 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask .|. shiftMask, xK_k), sendMessage $ Swap U)
     , ((modMask .|. shiftMask, xK_j), sendMessage $ Swap D)
 
+    , ((modMask, xK_c), SM.submap . M.fromList $
+            [((modMask, xK_d), changeDir defaultXPConfig)])
     , ((modMask, xK_i), SM.submap . M.fromList $
             [((modMask, xK_n), namedScratchpadAction scratchpads "notes"),
             ((modMask, xK_i), namedScratchpadAction scratchpads "information"),
             ((modMask, xK_p), namedScratchpadAction scratchpads "htop"),
             ((modMask, xK_m), namedScratchpadAction scratchpads "music"),
             ((modMask, xK_v), namedScratchpadAction scratchpads "volume")])
+    , ((modMask, xK_m), SM.submap . M.fromList $
+            [ ((modMask, xK_p), spawn "mpc toggle")
+            , ((modMask, xK_comma), spawn "mpc prev")
+            , ((modMask, xK_period), spawn "mpc next")
+            ])
     , ((modMask, xK_o), SM.submap . M.fromList $
             [ ((modMask, xK_e), spawn "gvim")
             , ((modMask, xK_b), spawn "chromium")
             , ((modMask, xK_v), spawn "vlc")
             , ((modMask, xK_t), spawn $ XMonad.terminal conf)
-            , ((modMask, xK_f), spawn "nautilus --no-desktop")
+            , ((modMask, xK_f), spawn "urxvt -e ranger")
             ])
     , ((modMask, xK_a), SM.submap . M.fromList $
             [ ((modMask, xK_n), appendFilePrompt smallXPConfig "~/Dropbox/notes/Everything")
@@ -236,7 +242,7 @@ myLayout = showWName' (defaultSWNConfig {swn_fade = 0.1, swn_font = "xft: Ubuntu
         $ onWorkspace "procurement" (workspaceDir "/home/gavri/supply-chain/sc-proc" defaultLayout)
         $ onWorkspace "ui" (workspaceDir "/home/gavri/supply-chain/sc-proc-ui" defaultLayout)
         $ onWorkspace "fulfillment" (workspaceDir "/home/gavri/supply-chain/sc-fulfillment" defaultLayout)
-        $ onWorkspace "supplier" (workspaceDir "/home/gavri/supply-chain/sc-supplier" defaultLayout)
+        -- $ onWorkspace "supplier" (workspaceDir "/home/gavri/supply-chain/sc-supplier" defaultLayout)
         $ onWorkspace "erp" (workspaceDir "/home/gavri/supply-chain/" defaultLayout)
         $ onWorkspace "core" (workspaceDir "/home/gavri/supply-chain/sc-core" defaultLayout)
         $ onWorkspace "oms" (workspaceDir "/home/gavri/supply-chain/sc-oms" defaultLayout)

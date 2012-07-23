@@ -1,7 +1,7 @@
 PATH=$PATH:~/.cabal/bin
 function bash_git_branch
 {
-  git branch 2> /dev/null | grep \* | python -c "print '['+ raw_input()[2:] + ']'" 2> /dev/null
+  git branch 2> /dev/null | grep \* | cut -f 2 -d' ' 2>/dev/null
 }
 
 PS1='\w\[\033[00;33m\]$(bash_git_branch)\[\033[00;00m\]\$'
@@ -10,12 +10,18 @@ export LESS=-R
 
 #git oneline for multiline messages
 alias gl='git log --oneline'
-alias glg="git log --oneline --graph"
-alias ack='ack-grep'
+alias glg="git log --oneline --graph --decorate"
+alias ack-grep='ack'
 alias ls='ls --color'
 
 source /etc/bash_completion.d/git
 source /etc/bash_completion.d/cower
 
-export JAVA_OPTS="-d32"
+# export JAVA_OPTS="-d64"
 export JRUBY_OPTS="--1.9 -X+O"
+
+PATH=$PATH:/usr/bin/vendor_perl
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+
+HISTSIZE=5000
+HISTFILESIZE=5000

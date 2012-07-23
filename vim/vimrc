@@ -10,6 +10,7 @@ Bundle 'Gundo'
 Bundle 'klen/rope-vim.git'
 Bundle 'trapd00r/vidir'
 Bundle 'notes.vim'
+Bundle 'sudo.vim'
 Bundle 'austintaylor/vim-indentobject'
 Bundle 'ecomba/vim-ruby-refactoring'
 Bundle 'visualstar.vim'
@@ -161,6 +162,8 @@ map <Leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
 map <leader>rg :RopeGotoDefinition<CR>
 map <Leader>rr :RopeRename<CR>
 
+map <Leader>nh :noh<CR>
+
 map <C-J> :m +1 <CR>
 map <C-K> :m -2 <CR>
 
@@ -185,11 +188,6 @@ command! Rschema :e db/schema.rb
 if filereadable(".vimrc.local")
   source .vimrc.local
 endif
-
-if executable("ack")
-  set grepprg=ack\ -H\ --nogroup\ --nocolor\ --ignore-dir=tmp\ --ignore-dir=coverage
-endif
-
 
 set number
 set numberwidth=5
@@ -220,7 +218,6 @@ function! OpenURL()
 endfunction
 map <Leader>w :call OpenURL()<CR>
 
-let g:ackprg="ack-grep -H --nocolor --nogroup --column"
 set hidden
 set guioptions-=m
 set guioptions-=T
@@ -289,3 +286,4 @@ for p in sys.path:
 EOF
 set guioptions+=c
 au FocusLost * :wa
+set autowriteall
