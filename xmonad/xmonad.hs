@@ -101,7 +101,6 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask              , xK_q     ), restart "xmonad" True)
     , ((modMask, xK_g), goToSelected defaultGSConfig)
     , ((modMask .|. shiftMask, xK_g), bringSelected defaultGSConfig)
-    , ((modMask, xK_b), sendMessage ToggleStruts)
     , ((modMask              , xK_BackSpace), focusUrgent)
     , ((modMask .|. controlMask, xK_y), defaultCommands >>= runCommand)
     , ((modMask,                 xK_Right), sendMessage $ Go R)
@@ -136,10 +135,18 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
             ])
     , ((modMask, xK_o), SM.submap . M.fromList $
             [ ((modMask, xK_e), spawn "gvim")
-            , ((modMask, xK_b), spawn "chromium")
             , ((modMask, xK_v), spawn "vlc")
             , ((modMask, xK_t), spawn $ XMonad.terminal conf)
             , ((modMask, xK_f), spawn "urxvt -e ranger")
+            ])
+    , ((modMask, xK_b), SM.submap . M.fromList $
+            [ ((modMask, xK_f), spawn "google-chrome --new-window facebook.com")
+            , ((modMask, xK_t), spawn "google-chrome --new-window twitter.com")
+            , ((modMask, xK_g), spawn "google-chrome --new-window google.co.in")
+            , ((modMask, xK_u), spawn "google-chrome --new-window youtube.com")
+            , ((modMask, xK_m), spawn "google-chrome --new-window mail.google.com")
+            , ((modMask, xK_space), spawn "google-chrome")
+            , ((modMask, xK_BackSpace), spawn "google-chrome --incognito")
             ])
     , ((modMask, xK_a), SM.submap . M.fromList $
             [ ((modMask, xK_n), appendFilePrompt smallXPConfig "~/Dropbox/notes/Everything")
