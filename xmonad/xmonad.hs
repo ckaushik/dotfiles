@@ -148,6 +148,10 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
             , ((modMask, xK_space), spawn "google-chrome")
             , ((modMask, xK_BackSpace), spawn "google-chrome --incognito")
             ])
+    , ((modMask, xK_w), SM.submap . M.fromList $
+            [ ((modMask, xK_period), killAllOtherCopies)
+            , ((modMask, xK_8), windows copyToAll)
+            ])
     , ((modMask, xK_a), SM.submap . M.fromList $
             [ ((modMask, xK_n), appendFilePrompt smallXPConfig "~/Dropbox/notes/Everything")
             ])

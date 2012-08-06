@@ -15,7 +15,6 @@ alias ack-grep='ack'
 alias ls='ls --color'
 
 source /etc/bash_completion.d/git
-source /etc/bash_completion.d/cower
 
 # export JAVA_OPTS="-d64"
 export JRUBY_OPTS="--1.9 -X+O"
