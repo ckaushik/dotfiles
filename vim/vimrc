@@ -5,6 +5,7 @@ call vundle#rc()
 Bundle 'tpope/vim-git'
 Bundle 'Rubytest.vim'
 Bundle 'pbrisbin/html-template-syntax.git'
+Bundle 'sprsquish/thrift.vim.git'
 Bundle 'csv.vim'
 Bundle 'Gundo'
 Bundle 'derekwyatt/vim-scala.git'

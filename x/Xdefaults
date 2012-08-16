@@ -19,5 +19,12 @@ URxvt*boldFont: xft:DejaVu Sans Mono:bold:pixelsize=19:antialias=true:hinting=tr
 URxvt*scrollBar: false
 URxvt*scrollBar_right: true
 URxvt*scrollstyle: rxvt
-
-
+URxvt.perl-lib: /home/g/urxvt-perls
+URxvt.perl-ext-common: url-select,keyboard-select,clipboard
+URxvt.keysym.M-Escape: perl:keyboard-select:activate
+URxvt.keysym.M-u: perl:url-select:select_next
+URxvt.keysym.C-S-C: perl:clipboard:copy
+URxvt.keysym.C-v: perl:clipboard:paste
+URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
+URxvt.iso14755: false
+URxvt.iso14755_52: false

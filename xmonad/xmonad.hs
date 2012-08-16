@@ -68,6 +68,8 @@ smallXPConfig = bigXPConfig
 scratchpads = [
      NS "htop" "urxvt -e htop" (title =? "htop")
          (customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3)),
+     NS "social" "gwibber" (className =? "gwibber")
+         (customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3)),
      NS "music" "urxvt -title music -e ncmpc" (title =? "music")
          (customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3)),
      NS "notes" "gvim --role notes -c 'set autoread' -c'set wrap' -c 'au FocusLost * :wa' -c 'colorscheme slate' -c 'Note'" (role =? "notes")
@@ -127,6 +129,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
             ((modMask, xK_i), namedScratchpadAction scratchpads "information"),
             ((modMask, xK_p), namedScratchpadAction scratchpads "htop"),
             ((modMask, xK_m), namedScratchpadAction scratchpads "music"),
+            ((modMask, xK_s), namedScratchpadAction scratchpads "social"),
             ((modMask, xK_v), namedScratchpadAction scratchpads "volume")])
     , ((modMask, xK_m), SM.submap . M.fromList $
             [ ((modMask, xK_p), spawn "mpc toggle")
@@ -279,6 +282,10 @@ main = xmonad $ ewmh defaultConfig {
                   setWMName "LG3D"
                   startupHook defaultConfig
                   spawn "killall xflux; ~/xflux  -l 12.9833 -g 77.5833"
+                  spawn "synclient PalmDetect=1"
+                  spawn "synclient TapButton1=1"
+                  spawn "synclient TapButton2=3"
+                  spawn "synclient TapButton3=2"
                   spawn "pidgin"
                   spawn "killall parcellite; parcellite"
                   spawn "dropbox start"
