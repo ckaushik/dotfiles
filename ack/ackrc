@@ -1,1 +1,3 @@
 --pager=less
+--type-set=groovy=.groovy
+--type-set=gsp=.gsp
