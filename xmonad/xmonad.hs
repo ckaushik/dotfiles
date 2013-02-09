@@ -141,15 +141,18 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
             , ((modMask, xK_v), spawn "vlc")
             , ((modMask, xK_t), spawn $ XMonad.terminal conf)
             , ((modMask, xK_f), spawn "urxvt -e ranger")
+            , ((modMask, xK_b), spawn "chromium-browser")
+            , ((modMask, xK_i), spawn "pidgin")
             ])
     , ((modMask, xK_b), SM.submap . M.fromList $
-            [ ((modMask, xK_f), spawn "google-chrome --new-window facebook.com")
-            , ((modMask, xK_t), spawn "google-chrome --new-window twitter.com")
-            , ((modMask, xK_g), spawn "google-chrome --new-window google.co.in")
-            , ((modMask, xK_u), spawn "google-chrome --new-window youtube.com")
-            , ((modMask, xK_m), spawn "google-chrome --new-window mail.google.com")
-            , ((modMask, xK_space), spawn "google-chrome")
-            , ((modMask, xK_BackSpace), spawn "google-chrome --incognito")
+            [ ((modMask, xK_f), spawn "chromium-browser --new-window facebook.com")
+            , ((modMask, xK_t), spawn "chromium-browser --new-window twitter.com")
+            , ((modMask, xK_g), spawn "chromium-browser --new-window google.co.in")
+            , ((modMask, xK_u), spawn "chromium-browser --new-window youtube.com")
+            , ((modMask, xK_m), spawn "chromium-browser --new-window mail.google.com")
+            , ((modMask, xK_r), spawn "chromium-browser --new-window redmine.slicehost.com/projects/software/issues")
+            , ((modMask, xK_space), spawn "chromium-browser")
+            , ((modMask, xK_BackSpace), spawn "chromium-browser --incognito")
             ])
     , ((modMask, xK_w), SM.submap . M.fromList $
             [ ((modMask, xK_period), killAllOtherCopies)
@@ -170,7 +173,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
             , ((modMask, xK_BackSpace), removeWorkspace)
             , ((modMask, xK_Left), moveTo Prev HiddenNonEmptyWS)
             , ((modMask, xK_Right), moveTo Next HiddenNonEmptyWS)
-            , ((modMask, xK_Return), toggleWS' specialWorkspaces)
+            -- , ((modMask, xK_Return), toggleWS' specialWorkspaces)
             , ((modMask .|. shiftMask, xK_Return), toggleWSWhileShiftingCurrentWindow)
             ]
       )
@@ -253,22 +256,17 @@ defaultLayout = layoutHintsToCenter (tiled)
 
 myLayout = showWName' (defaultSWNConfig {swn_fade = 0.1, swn_font = "xft: Ubuntu-30", swn_color = "#a8f7a3", swn_bgcolor = "#3f3c6d"}) $ toggleLayouts Full $ workspaceDir "" $ windowNavigation $ avoidStruts
         $ onWorkspace "im" (withIM (1%7) (Role "buddy_list") defaultLayout)
-        $ onWorkspace "procurement" (workspaceDir "/home/gavri/supply-chain/sc-proc" defaultLayout)
-        $ onWorkspace "ui" (workspaceDir "/home/gavri/supply-chain/sc-proc-ui" defaultLayout)
-        $ onWorkspace "fulfillment" (workspaceDir "/home/gavri/supply-chain/sc-fulfillment" defaultLayout)
-        -- $ onWorkspace "supplier" (workspaceDir "/home/gavri/supply-chain/sc-supplier" defaultLayout)
-        $ onWorkspace "erp" (workspaceDir "/home/gavri/supply-chain/" defaultLayout)
-        $ onWorkspace "core" (workspaceDir "/home/gavri/supply-chain/sc-core" defaultLayout)
-        $ onWorkspace "oms" (workspaceDir "/home/gavri/supply-chain/sc-oms" defaultLayout)
+        $ onWorkspace "qb" (workspaceDir "/home/kaushikc/code/slicehost/qb" defaultLayout)
+        $ onWorkspace "nucleus" (workspaceDir "/home/kaushikc/code/slicehost/nucleus" defaultLayout)
         $ onWorkspace "wall" defaultLayout
         $ defaultLayout
 
 myManageHook = composeAll .concat $ [[namedScratchpadManageHook scratchpads, manageDocks], [className =? "Do" --> doIgnore ]]
 main = xmonad $ ewmh defaultConfig {
         focusFollowsMouse  = True,
-        terminal  = "urxvt",
-        modMask            = mod4Mask,
-        workspaces         = ["im", "mail", "browser", "supplier", "core", "procurement", "fulfillment", "ui", "oms", "wall"],
+        terminal  = "konsole",
+        modMask            = mod1Mask,
+        workspaces         = ["im", "mail", "browser", "qb", "nucleus", "wall"],
         keys               = myKeys,
         mouseBindings      = myMouseBindings,
         focusedBorderColor = "#00FF00",
