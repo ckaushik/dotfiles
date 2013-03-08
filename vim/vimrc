@@ -3,43 +3,37 @@ call vundle#rc()
 filetype off
 
 Bundle 'tpope/vim-git'
-" Bundle 'Rubytest.vim'
-" Bundle 'pbrisbin/html-template-syntax.git'
-" Bundle 'sprsquish/thrift.vim.git'
 Bundle 'csv.vim'
 " Bundle 'Gundo'
-" Bundle 'derekwyatt/vim-scala.git'
-" Bundle 'klen/rope-vim.git'
-" Bundle 'trapd00r/vidir'
+Bundle 'klen/rope-vim.git'
+Bundle 'briancollins/vim-jst.git'
 Bundle 'notes.vim'
+Bundle 'vim-scripts/Rainbow-Parenthsis-Bundle'
 Bundle 'sudo.vim'
 Bundle 'austintaylor/vim-indentobject'
-" Bundle 'ecomba/vim-ruby-refactoring'
 Bundle 'visualstar.vim'
+Bundle 'pangloss/vim-javascript'
+Bundle 'mrkschan/vim-node-jslint'
 Bundle 'milkbikis/IDSearch.vim.git'
 Bundle 'AutoTag'
-" Bundle 'vimGTD'
 Bundle 'textobj-diff'
 Bundle 'textobj-entire'
 Bundle 'textobj-fold'
 Bundle 'textobj-lastpat'
 Bundle 'textobj-syntax'
 Bundle 'tpope/vim-fugitive'
-" Bundle 'gregsexton/gitv'
+Bundle 'gregsexton/gitv'
 :set lazyredraw
 highlight diffAdded guifg=#00bf00
 highlight diffRemoved guifg=#bf0000
 Bundle 'tomtom/tcomment_vim'
 Bundle 'scrooloose/nerdtree'
-" Bundle 'tpope/vim-rails'
 Bundle 'mileszs/ack.vim'
 Bundle 'tpope/vim-surround'
 Bundle 'L9'
 Bundle 'FuzzyFinder'
-" Bundle 'endwise.vim'
 Bundle 'matchit.zip'
 Bundle 'textobj-user'
-Bundle 'textobj-rubyblock'
 runtime macros/matchit.vim
 Bundle 'unimpaired.vim'
 Bundle 'errormarker.vim'
@@ -47,19 +41,16 @@ Bundle 'abolish.vim'
 Bundle 'delimitMate.vim'
 Bundle 'camelcasemotion'
 Bundle 'railscasts'
-" Bundle 'lukerandall/haskellmode-vim'
 Bundle 'scrooloose/syntastic'
-" Bundle 'snipMate'
-" Bundle 'hlint'
-autocmd FileType haskell compiler hlint
+Bundle 'nvie/vim-pyunit'
+Bundle 'embear/vim-localvimrc'
+Bundle 'snipMate'
+Bundle 'pep8'
 
-let g:rubytest_in_quickfix = 1 
 
 set nocompatible
 
 set backspace=indent,eol,start
-let g:rubytest_cmd_test = "ruby -W0 %p" 
-let g:rubytest_cmd_testcase = "ruby -W0 %p -n '/%c/'" 
 set nobackup
 set nowritebackup
 set noswapfile
@@ -112,23 +103,6 @@ let mapleader = ","
 
 map <Leader>R :e doc/README_FOR_APP<CR>
 
-map <Leader>m :Rmodel 
-map <Leader>c :Rcontroller 
-map <Leader>v :Rview 
-map <Leader>u :Runittest 
-map <Leader>f :Rfunctionaltest 
-map <Leader>tm :RTmodel 
-map <Leader>tc :RTcontroller 
-map <Leader>tv :RTview 
-map <Leader>tu :RTunittest 
-map <Leader>tf :RTfunctionaltest 
-map <Leader>sm :RSmodel 
-map <Leader>sc :RScontroller 
-map <Leader>sv :RSview 
-map <Leader>su :RSunittest 
-map <Leader>sf :RSfunctionaltest 
-map <Leader>rt :Rake<CR>
-
 map <Leader>a :Ack 
 map <Leader>x :%s/\s\+$//<CR>
 
@@ -159,7 +133,6 @@ map <Leader>fx :!ctags -R *<CR>
 map <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
 
 map <Leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
-
 
 map <leader>rg :RopeGotoDefinition<CR>
 map <Leader>rr :RopeRename<CR>
@@ -203,7 +176,6 @@ set complete=.,t
 set ignorecase
 set smartcase
 
-let g:Tlist_Ctags_Cmd="ctags --exclude='*.js'"
 set tags=./tags;
 
 let g:fuf_splitPathMatching=1
@@ -245,7 +217,7 @@ let g:haddock_browser = "/usr/bin/google-chrome"
 let g:ghc = "/usr/bin/ghc"
 let g:haddock_browser_callformat = "%s %s"
 let g:haddock_docdir = "/usr/share/doc/ghc6-doc/html/"
-let g:syntastic_enable_signs=1
+" let g:syntastic_enable_signs=1
 
 :filetype plugin on
 :nmap <c-tab> :bnext<cr>
@@ -273,9 +245,9 @@ let g:notes_shadowdir = '~/notes_shadow'
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 
 set textwidth=79
-set tabstop=8
-set softtabstop=2
-set shiftwidth=2
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
 
 
 python << EOF
@@ -287,5 +259,18 @@ for p in sys.path:
         vim.command(r"set path+=%s" % (p.replace(" ", r"\ ")))
 EOF
 set guioptions+=c
-au FocusLost * :wa
-set autowriteall
+" au FocusLost * :wa
+" set autowriteall
+
+
+au FileType javascript setl sw=4 sts=4 et
+let g:syntastic_check_on_open=1
+let g:syntastic_enable_signs=1
+let g:syntastic_auto_jump=1
+let g:syntastic_stl_format = '[%E{Err: %fe #%e}%B{, }%W{Warn: %fw #%w}]'
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:localvimrc_ask=0

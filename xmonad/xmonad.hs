@@ -150,7 +150,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
             , ((modMask, xK_g), spawn "chromium-browser --new-window google.co.in")
             , ((modMask, xK_u), spawn "chromium-browser --new-window youtube.com")
             , ((modMask, xK_m), spawn "chromium-browser --new-window mail.google.com")
-            , ((modMask, xK_r), spawn "chromium-browser --new-window redmine.slicehost.com/projects/software/issues")
+            , ((modMask, xK_h), spawn "chromium-browser --new-window 127.0.0.1")
             , ((modMask, xK_space), spawn "chromium-browser")
             , ((modMask, xK_BackSpace), spawn "chromium-browser --incognito")
             ])
@@ -256,8 +256,9 @@ defaultLayout = layoutHintsToCenter (tiled)
 
 myLayout = showWName' (defaultSWNConfig {swn_fade = 0.1, swn_font = "xft: Ubuntu-30", swn_color = "#a8f7a3", swn_bgcolor = "#3f3c6d"}) $ toggleLayouts Full $ workspaceDir "" $ windowNavigation $ avoidStruts
         $ onWorkspace "im" (withIM (1%7) (Role "buddy_list") defaultLayout)
-        $ onWorkspace "qb" (workspaceDir "/home/kaushikc/code/slicehost/qb" defaultLayout)
-        $ onWorkspace "nucleus" (workspaceDir "/home/kaushikc/code/slicehost/nucleus" defaultLayout)
+        $ onWorkspace "install" (workspaceDir "/home/kaushikc/code/devstack" defaultLayout)
+        $ onWorkspace "admin-api" (workspaceDir "/opt/stack/nova/nova/api/openstack/compute/contrib" defaultLayout)
+        $ onWorkspace "code" (workspaceDir "/home/kaushikc/code/nova" defaultLayout)
         $ onWorkspace "wall" defaultLayout
         $ defaultLayout
 
@@ -266,7 +267,7 @@ main = xmonad $ ewmh defaultConfig {
         focusFollowsMouse  = True,
         terminal  = "konsole",
         modMask            = mod1Mask,
-        workspaces         = ["im", "mail", "browser", "qb", "nucleus", "wall"],
+        workspaces         = ["im", "mail", "browser", "install", "code", "admin-api", "wall"],
         keys               = myKeys,
         mouseBindings      = myMouseBindings,
         focusedBorderColor = "#00FF00",
@@ -286,7 +287,6 @@ main = xmonad $ ewmh defaultConfig {
                   spawn "synclient TapButton3=2"
                   spawn "pidgin"
                   spawn "killall parcellite; parcellite"
-                  spawn "dropbox start"
         , layoutHook         = windowArrange $ smartBorders $ myLayout
   }
 
