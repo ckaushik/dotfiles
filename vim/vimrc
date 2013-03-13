@@ -2,9 +2,9 @@ set rtp+=~/.vim/vundle/
 call vundle#rc()
 filetype off
 
+Bundle 'jabapyth/vim-debug'
 Bundle 'tpope/vim-git'
 Bundle 'csv.vim'
-" Bundle 'Gundo'
 Bundle 'klen/rope-vim.git'
 Bundle 'briancollins/vim-jst.git'
 Bundle 'notes.vim'
@@ -14,7 +14,6 @@ Bundle 'austintaylor/vim-indentobject'
 Bundle 'visualstar.vim'
 Bundle 'pangloss/vim-javascript'
 Bundle 'mrkschan/vim-node-jslint'
-Bundle 'milkbikis/IDSearch.vim.git'
 Bundle 'AutoTag'
 Bundle 'textobj-diff'
 Bundle 'textobj-entire'
@@ -46,7 +45,7 @@ Bundle 'nvie/vim-pyunit'
 Bundle 'embear/vim-localvimrc'
 Bundle 'snipMate'
 Bundle 'pep8'
-
+" Bundle 'joonty/vdebug'
 
 set nocompatible
 
@@ -60,7 +59,6 @@ set showcmd
 set incsearch
 
 map Q gq
-
 
 if (&t_Co > 2 || has("gui_running")) && !exists("syntax_on")
   syntax on
@@ -118,7 +116,6 @@ nmap <leader>gL :Gitv<cr>
 nmap <leader>gl :Gitv!<cr>
 vmap <leader>gl :Gitv!<cr>
 
-
 map <Leader>fb :FufBuffer<CR>
 map <Leader>ff :FufCoverageFile<CR>
 map <Leader>ft :FufTag<CR>
@@ -131,11 +128,22 @@ map <Leader>fq :FufQuickFix<CR>
 map <Leader>fx :!ctags -R *<CR>
 
 map <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
-
 map <Leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
 
 map <leader>rg :RopeGotoDefinition<CR>
 map <Leader>rr :RopeRename<CR>
+map <Leader>rf :RopeFindFile<CR>
+map <Leader>rm :RopeExtractMethod<CR>
+map <Leader>ro :RopeOrganizeImports<CR>
+
+map <Leader>t :call PyUnitRunTests()<CR>
+map <C-n> :RopeCodeAssist<CR>
+map <Leader>A :call PyUnitSwitchToCounterpart()<CR>
+
+map <Leader>dh :dbg here<CR>
+map <Leader>dc :Dbg .<CR>
+map <Leader>dx :Dbg quit<CR>
+map <Leader>db :dbg break<CR>
 
 map <Leader>nh :noh<CR>
 
@@ -148,7 +156,7 @@ vmap D y'>p
 
 vmap P p :call setreg('"', getreg('0')) <CR>
 
-au! BufRead,BufNewFile *.haml         setfiletype haml
+" au! BufRead,BufNewFile *.haml         setfiletype haml
 
 nmap <F1> <Esc>
 
@@ -180,17 +188,17 @@ set tags=./tags;
 
 let g:fuf_splitPathMatching=1
 
-command -bar -nargs=1 OpenURL :!open <args>
-function! OpenURL()
-  let s:uri = matchstr(getline("."), '[a-z]*:\/\/[^ >,;:]*')
-  echo s:uri
-  if s:uri != ""
-	  exec "!open \"" . s:uri . "\""
-  else
-	  echo "No URI found in line."
-  endif
-endfunction
-map <Leader>w :call OpenURL()<CR>
+" command -bar -nargs=1 OpenURL :!open <args>
+" function! OpenURL()
+"   let s:uri = matchstr(getline("."), '[a-z]*:\/\/[^ >,;:]*')
+"   echo s:uri
+"   if s:uri != ""
+" 	  exec "!open \"" . s:uri . "\""
+"   else
+" 	  echo "No URI found in line."
+"   endif
+" endfunction
+" map <Leader>w :call OpenURL()<CR>
 
 set hidden
 set guioptions-=m
@@ -213,10 +221,10 @@ set completeopt+=longest,menuone
 
 au Bufenter *.hs compiler ghc
 
-let g:haddock_browser = "/usr/bin/google-chrome"
-let g:ghc = "/usr/bin/ghc"
-let g:haddock_browser_callformat = "%s %s"
-let g:haddock_docdir = "/usr/share/doc/ghc6-doc/html/"
+" let g:haddock_browser = "/usr/bin/google-chrome"
+" let g:ghc = "/usr/bin/ghc"
+" let g:haddock_browser_callformat = "%s %s"
+" let g:haddock_docdir = "/usr/share/doc/ghc6-doc/html/"
 " let g:syntastic_enable_signs=1
 
 :filetype plugin on
@@ -227,7 +235,7 @@ let g:haddock_docdir = "/usr/share/doc/ghc6-doc/html/"
 
 autocmd BufReadPost fugitive://* set bufhidden=delete
 
-set autowriteall
+" set autowriteall
 
 let g:fuf_patternSeparator = ';'
 let g:Gitv_WipeAllOnClose = 1
@@ -240,8 +248,6 @@ autocmd Syntax ruby setlocal foldmethod=syntax
 autocmd Syntax python setlocal foldmethod=indent
 autocmd Syntax ruby normal zR
 autocmd Syntax python normal zR
-let g:notes_directory = '~/Dropbox/notes'
-let g:notes_shadowdir = '~/notes_shadow'
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 
 set textwidth=79
@@ -263,14 +269,14 @@ set guioptions+=c
 " set autowriteall
 
 
-au FileType javascript setl sw=4 sts=4 et
-let g:syntastic_check_on_open=1
-let g:syntastic_enable_signs=1
-let g:syntastic_auto_jump=1
-let g:syntastic_stl_format = '[%E{Err: %fe #%e}%B{, }%W{Warn: %fw #%w}]'
-
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+" au FileType javascript setl sw=4 sts=4 et
+" let g:syntastic_check_on_open=1
+" let g:syntastic_enable_signs=1
+" let g:syntastic_auto_jump=1
+" let g:syntastic_stl_format = '[%E{Err: %fe #%e}%B{, }%W{Warn: %fw #%w}]'
+" 
+" set statusline+=%#warningmsg#
+" set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%*
 
 let g:localvimrc_ask=0
