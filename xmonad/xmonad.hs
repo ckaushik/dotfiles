@@ -255,9 +255,6 @@ defaultLayout = layoutHintsToCenter (tiled)
      tiled  = Tall 1 (3 / 100) (1 / 2)
 
 myLayout = showWName' (defaultSWNConfig {swn_fade = 0.1, swn_font = "xft: Ubuntu-30", swn_color = "#a8f7a3", swn_bgcolor = "#3f3c6d"}) $ toggleLayouts Full $ workspaceDir "" $ windowNavigation $ avoidStruts
-        $ onWorkspace "im" (withIM (1%7) (Role "buddy_list") defaultLayout)
-        $ onWorkspace "install" (workspaceDir "/home/kaushikc/code/devstack" defaultLayout)
-        $ onWorkspace "admin-api" (workspaceDir "/opt/stack/nova/nova/api/openstack/compute/contrib" defaultLayout)
         $ onWorkspace "code" (workspaceDir "/home/kaushikc/code/nova" defaultLayout)
         $ onWorkspace "wall" defaultLayout
         $ defaultLayout
@@ -265,9 +262,9 @@ myLayout = showWName' (defaultSWNConfig {swn_fade = 0.1, swn_font = "xft: Ubuntu
 myManageHook = composeAll .concat $ [[namedScratchpadManageHook scratchpads, manageDocks], [className =? "Do" --> doIgnore ]]
 main = xmonad $ ewmh defaultConfig {
         focusFollowsMouse  = True,
-        terminal  = "konsole",
+        terminal  = "gnome-terminal",
         modMask            = mod1Mask,
-        workspaces         = ["im", "mail", "browser", "install", "code", "admin-api", "wall"],
+        workspaces         = ["code", "wall"],
         keys               = myKeys,
         mouseBindings      = myMouseBindings,
         focusedBorderColor = "#00FF00",
@@ -277,16 +274,6 @@ main = xmonad $ ewmh defaultConfig {
         , logHook            = do
                        dynamicLog
                        updatePointer (Relative 0.5 0.5)
-        , startupHook        = do
-                  setWMName "LG3D"
-                  startupHook defaultConfig
-                  spawn "killall xflux; ~/xflux  -l 12.9833 -g 77.5833"
-                  spawn "synclient PalmDetect=1"
-                  spawn "synclient TapButton1=1"
-                  spawn "synclient TapButton2=3"
-                  spawn "synclient TapButton3=2"
-                  spawn "pidgin"
-                  spawn "killall parcellite; parcellite"
         , layoutHook         = windowArrange $ smartBorders $ myLayout
   }
 
