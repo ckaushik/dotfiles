@@ -256,15 +256,6 @@ set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 
-
-python << EOF
-import os
-import sys
-import vim
-for p in sys.path:
-    if os.path.isdir(p):
-        vim.command(r"set path+=%s" % (p.replace(" ", r"\ ")))
-EOF
 set guioptions+=c
 " au FocusLost * :wa
 " set autowriteall

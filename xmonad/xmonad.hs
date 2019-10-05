@@ -138,21 +138,21 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
             ])
     , ((modMask, xK_o), SM.submap . M.fromList $
             [ ((modMask, xK_e), spawn "gvim")
-            , ((modMask, xK_v), spawn "vlc")
             , ((modMask, xK_t), spawn $ XMonad.terminal conf)
             , ((modMask, xK_f), spawn "urxvt -e ranger")
-            , ((modMask, xK_b), spawn "chromium-browser")
-            , ((modMask, xK_i), spawn "pidgin")
+            , ((modMask, xK_b), spawn "google-chrome")
+            , ((modMask, xK_i), spawn "idea")
+            , ((modMask, xK_s), spawn "slack")
             ])
     , ((modMask, xK_b), SM.submap . M.fromList $
-            [ ((modMask, xK_f), spawn "chromium-browser --new-window facebook.com")
-            , ((modMask, xK_t), spawn "chromium-browser --new-window twitter.com")
-            , ((modMask, xK_g), spawn "chromium-browser --new-window google.co.in")
-            , ((modMask, xK_u), spawn "chromium-browser --new-window youtube.com")
-            , ((modMask, xK_m), spawn "chromium-browser --new-window mail.google.com")
-            , ((modMask, xK_h), spawn "chromium-browser --new-window 127.0.0.1")
-            , ((modMask, xK_space), spawn "chromium-browser")
-            , ((modMask, xK_BackSpace), spawn "chromium-browser --incognito")
+            [ ((modMask, xK_f), spawn "google-chrome --new-window facebook.com")
+            , ((modMask, xK_t), spawn "google-chrome --new-window twitter.com")
+            , ((modMask, xK_g), spawn "google-chrome --new-window google.co.in")
+            , ((modMask, xK_y), spawn "google-chrome --new-window youtube.com")
+            , ((modMask, xK_m), spawn "google-chrome --new-window mail.google.com")
+            , ((modMask, xK_h), spawn "google-chrome --new-window 127.0.0.1")
+            , ((modMask, xK_space), spawn "google-chrome")
+            , ((modMask, xK_BackSpace), spawn "google-chrome --incognito")
             ])
     , ((modMask, xK_w), SM.submap . M.fromList $
             [ ((modMask, xK_period), killAllOtherCopies)
@@ -273,7 +273,6 @@ main = xmonad $ ewmh defaultConfig {
         , manageHook         = manageHook defaultConfig <+> myManageHook
         , logHook            = do
                        dynamicLog
-                       updatePointer (Relative 0.5 0.5)
         , layoutHook         = windowArrange $ smartBorders $ myLayout
   }
 
